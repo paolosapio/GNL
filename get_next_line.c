@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 17:41:01 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/15 14:29:41 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:02:55 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -81,6 +81,9 @@ char *get_next_line(int fd)
 			free(ps[SICILY]);
 			return ft_substr(ellis_island, 0, (counter_n0_str(ellis_island) + 1));
 			//acabas de rear un boocle infinito de la ultima linea entregada, sigues que vas bien!
+			//DAVID ME SUGIERE DE REPLANTEAR EL UTILIZO DE ft_strchr() para devolver directamente la resta del punterooparzial meno el puntero total!
+			//
+			//replantear: LEER SCRIVIR ACTUALIZAR!
 		}
 		ps[SICILY][boat_captain_report] = '\0';
 		if (ellis_island == NULL)
@@ -106,7 +109,7 @@ char *get_next_line(int fd)
 	}
 	return (NULL);
 }
-
+/*
 
 #include <stdio.h>
 int main (void)
@@ -130,4 +133,4 @@ int main (void)
 	//getchar(); //mi blocca l'esecuzione peer fare un debug con "leack a.aut"
 	//system("leaks a.out");
 	return (0);
-}
+}*/
