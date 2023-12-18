@@ -6,10 +6,12 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 17:41:01 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/18 16:39:42 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/18 17:28:00 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+// no hacer lectura extra al final del archivo
+// proteciones de el archivo vacio y fd incorecto
+//
 #include "get_next_line.h"
 
 #define SICILY		0
