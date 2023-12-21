@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 14:08:37 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/21 10:08:09 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/21 17:13:01 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 100000000
+#  define BUFFER_SIZE 2
 # endif
 
+void    *ft_calloc(size_t count, size_t size);
+void	las_trip_to_NY(char **ps, char *ellis_island);
 char	*get_next_line(int fd);
 size_t  ft_strlen(const char *s);
 char    *ft_strchr(const char *s, int c);

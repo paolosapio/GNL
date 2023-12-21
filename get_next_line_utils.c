@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:18:11 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/13 15:38:44 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/21 14:00:07 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    *ft_calloc(size_t count, size_t size)
         return (NULL);
     while (total_size > 0)
     {
-        pointer[i] = 0;
+        pointer[i] = '\0';
         total_size--;
         i++;
     }

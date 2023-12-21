@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 17:41:01 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/21 10:44:52 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/21 17:24:00 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 // no hacer lectura extra al final del archivo
@@ -69,45 +69,36 @@ void	trip_to_NY(char **ps, char **ellis_island)
 
 char *get_next_line(int fd)
 {
-	char		*ps[3];
-	static char *ellis_island;
-	int			boat_captain_report;
+    char        *ps[3];
+    static char *ellis_island;
+    int         boat_captain_report;
 
-	if (fd < 0)
-		return (NULL);
-	ps[SICILY] = malloc(sizeof(char) * (IMMIGRANTS + 1));
-	if (ps[SICILY] == NULL)
+    if (fd < 0)
         return (NULL);
-	boat_captain_report = 1;
-	while (boat_captain_report> 0)
-	{
-		boat_captain_report = read(fd, ps[SICILY], IMMIGRANTS);
-		if (boat_captain_report == 0)
-		{
-			trip_to_NY(ps, &ellis_island);
+    ps[SICILY] = calloc(IMMIGRANTS + 1, sizeof(char));
+    if (ps[SICILY] == NULL)
+        return (NULL);
+    boat_captain_report = 1;
+    while (boat_captain_report > 0)
+    {
+        boat_captain_report = read(fd, ps[SICILY], IMMIGRANTS);
+        if (ellis_island == NULL)
+            ellis_island = ft_strdup(ps[SICILY]);
+        else
+        {
+            ps[AUX] = ellis_island;
+            ellis_island = ft_strjoin(ellis_island, ps[SICILY]);
+            free(ps[AUX]);
+        }
+        if ((ft_strchr(ellis_island, '\n')) || (boat_captain_report == 0))
+        {
+            trip_to_NY(ps, &ellis_island);
 			if (ps[NEW_YORK][0] == '\0')
-			{
-				free (ps[NEW_YORK]);
-				return (NULL);
-			}
-			return (ps[NEW_YORK]);
-		}
-		ps[SICILY][boat_captain_report] = '\0';
-		if (ellis_island == NULL)
-			ellis_island = ft_strdup(ps[SICILY]);
-		else
-		{
-			ps[AUX] = ellis_island;
-			ellis_island = ft_strjoin(ellis_island, ps[SICILY]);
-			free(ps[AUX]);
-		}
-		if (ft_strchr(ellis_island, '\n')) 
- 		{
-			trip_to_NY(ps, &ellis_island);
-			return (ps[NEW_YORK]);
-		}
-	}
-	return (NULL);
+                return (free (ps[NEW_YORK]), NULL);
+             return (ps[NEW_YORK]);
+        }
+    }
+    return (NULL);
 }
 
 int main (void)
@@ -118,7 +109,20 @@ int main (void)
 	atexit(leaks);
 //	leaks();
 	fd = open("poesia", O_RDONLY);
-	
+
+int i;
+while (i != 30)
+{
+	line = get_next_line(fd);
+	printf("line: %s", line);
+	free(line);
+if (line == NULL)
+			free(line);
+i++;
+}
+
+
+/*	
 	do
 	{
 	//	usleep(1000);
@@ -131,6 +135,7 @@ int main (void)
 		if (line == NULL)
 			free(line);
 	} while (line);
+*/
 	close(fd);
 	//getchar(); //mi blocca l'esecuzione peer fare un debug con "leack a.aut"
 	//system("leaks a.out");
