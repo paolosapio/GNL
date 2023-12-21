@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 14:08:37 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/18 16:37:29 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/21 10:08:09 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000
+#  define BUFFER_SIZE 100000000
 # endif
 
 char	*get_next_line(int fd);

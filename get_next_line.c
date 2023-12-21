@@ -6,11 +6,13 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 17:41:01 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/18 17:28:00 by psapio           ###   ########.fr       */
+/*   Updated: 2023/12/21 10:44:52 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 // no hacer lectura extra al final del archivo
 // proteciones de el archivo vacio y fd incorecto
+// si el BS es <= 0 protejer
+// si 
 //
 #include "get_next_line.h"
 
@@ -18,12 +20,13 @@
 #define AUX			1
 #define NEW_YORK	2
 #define IMMIGRANTS	BUFFER_SIZE
-/*
+
 void leaks()
 {
 	system("leaks -q a.out");
 }
-*/
+
+
 char	*ft_strdup(const char *s1)
 {
     size_t	size_p;
@@ -54,6 +57,16 @@ int counter_n0_str(char *str)
 	return (i);
 }
 
+void	trip_to_NY(char **ps, char **ellis_island)
+{
+	free(ps[SICILY]);
+	ps[AUX] = *ellis_island;
+	ps[NEW_YORK] = ft_substr(*ellis_island, 0, (counter_n0_str(*ellis_island) + 1));
+	*ellis_island = ft_substr(*ellis_island,
+			counter_n0_str(*ellis_island) + 1, (ft_strlen(*ellis_island)));
+	free(ps[AUX]);
+}
+
 char *get_next_line(int fd)
 {
 	char		*ps[3];
@@ -71,26 +84,17 @@ char *get_next_line(int fd)
 		boat_captain_report = read(fd, ps[SICILY], IMMIGRANTS);
 		if (boat_captain_report == 0)
 		{
-	//		printf("people in the island:%s\n", ellis_island);
-			free(ps[SICILY]);
-			ps[AUX] = ellis_island;
-			ps[NEW_YORK] = ft_substr(ellis_island, 0, (counter_n0_str(ellis_island) + 1));	
-			ellis_island = ft_substr(ellis_island, counter_n0_str(ellis_island) + 1, (ft_strlen(ellis_island)));
-			free(ps[AUX]);
+			trip_to_NY(ps, &ellis_island);
 			if (ps[NEW_YORK][0] == '\0')
 			{
 				free (ps[NEW_YORK]);
 				return (NULL);
 			}
 			return (ps[NEW_YORK]);
-
-			//replantear: LEER SCRIVIR ACTUALIZAR!
 		}
 		ps[SICILY][boat_captain_report] = '\0';
 		if (ellis_island == NULL)
-		{
 			ellis_island = ft_strdup(ps[SICILY]);
-		}
 		else
 		{
 			ps[AUX] = ellis_island;
@@ -99,18 +103,13 @@ char *get_next_line(int fd)
 		}
 		if (ft_strchr(ellis_island, '\n')) 
  		{
-			ps[AUX] = ellis_island;
-			ps[NEW_YORK] = ft_substr(ellis_island, 0, (counter_n0_str(ellis_island) + 1));	
-			ellis_island = ft_substr(ellis_island, counter_n0_str(ellis_island) + 1, (ft_strlen(ellis_island)));
-			free(ps[AUX]);
-			free(ps[SICILY]);
+			trip_to_NY(ps, &ellis_island);
 			return (ps[NEW_YORK]);
 		}
-//		leaks();
 	}
 	return (NULL);
 }
-/*
+
 int main (void)
 {
 	int fd;
@@ -133,9 +132,7 @@ int main (void)
 			free(line);
 	} while (line);
 	close(fd);
-
 	//getchar(); //mi blocca l'esecuzione peer fare un debug con "leack a.aut"
 	//system("leaks a.out");
 	return (0);
 }
-*/
