@@ -6,7 +6,7 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 17:41:01 by psapio            #+#    #+#             */
-/*   Updated: 2023/12/21 17:24:00 by psapio           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:48:23 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 // no hacer lectura extra al final del archivo
@@ -16,35 +16,18 @@
 //
 #include "get_next_line.h"
 
-#define SICILY		0
-#define AUX			1
-#define NEW_YORK	2
 #define IMMIGRANTS	BUFFER_SIZE
+
+typedef struct s_data
+{
+	char sicily[IMMIGRANTS];
+	char *aux;
+	char *new_york;
+} 	t_data;
 
 void leaks()
 {
 	system("leaks -q a.out");
-}
-
-
-char	*ft_strdup(const char *s1)
-{
-    size_t	size_p;
-    char	*s1double;
-    size_t	i;
-
-    i =	0;
-    size_p = ft_strlen(s1);
-    s1double = malloc(size_p + 1);
-    if (s1double == NULL)
-        return (NULL);
-    while (s1[i] != '\0')
-    {
-        s1double[i] = s1[i];
-        i++;
-    }
-    s1double[i] = '\0';
-    return (s1double);
 }
 
 int counter_n0_str(char *str)
@@ -57,71 +40,89 @@ int counter_n0_str(char *str)
 	return (i);
 }
 
-void	trip_to_NY(char **ps, char **ellis_island)
+void	trip_to_NY(t_data *data, char **ellis_island)
 {
-	free(ps[SICILY]);
-	ps[AUX] = *ellis_island;
-	ps[NEW_YORK] = ft_substr(*ellis_island, 0, (counter_n0_str(*ellis_island) + 1));
-	*ellis_island = ft_substr(*ellis_island,
-			counter_n0_str(*ellis_island) + 1, (ft_strlen(*ellis_island)));
-	free(ps[AUX]);
+	char *aux;
+	int start_position;
+
+	aux = *ellis_island;
+	data->new_york = ft_substr(*ellis_island, 0, (counter_n0_str(*ellis_island) + 1));
+	start_position = counter_n0_str(*ellis_island) + 1;	
+//	*ellis_island = ft_strdup(&(*ellis_island)[start_position]);
+	*ellis_island = ft_substr(*ellis_island, start_position, ft_strlen(*ellis_island));
+	free(aux);
 }
 
 char *get_next_line(int fd)
 {
-    char        *ps[3];
+	t_data 		data;
     static char *ellis_island;
     int         boat_captain_report;
 
-    if (fd < 0)
+    if (fd < 0 || (boat_captain_report = read(fd, NULL, 0) == -1))
+	{
+		free(ellis_island);
+		ellis_island = NULL;
         return (NULL);
-    ps[SICILY] = calloc(IMMIGRANTS + 1, sizeof(char));
-    if (ps[SICILY] == NULL)
-        return (NULL);
+	}
     boat_captain_report = 1;
+    if (ellis_island == NULL)
+        ellis_island = ft_strdup("");
     while (boat_captain_report > 0)
     {
-        boat_captain_report = read(fd, ps[SICILY], IMMIGRANTS);
-        if (ellis_island == NULL)
-            ellis_island = ft_strdup(ps[SICILY]);
-        else
-        {
-            ps[AUX] = ellis_island;
-            ellis_island = ft_strjoin(ellis_island, ps[SICILY]);
-            free(ps[AUX]);
-        }
+        boat_captain_report = read(fd, data.sicily, IMMIGRANTS);
+		data.sicily[boat_captain_report] = '\0';
+        data.aux = ellis_island;
+        ellis_island = ft_strjoin(ellis_island, data.sicily);
+        free(data.aux);
         if ((ft_strchr(ellis_island, '\n')) || (boat_captain_report == 0))
         {
-            trip_to_NY(ps, &ellis_island);
-			if (ps[NEW_YORK][0] == '\0')
-                return (free (ps[NEW_YORK]), NULL);
-             return (ps[NEW_YORK]);
+            trip_to_NY(&data, &ellis_island);
+			if (data.new_york[0] == '\0')
+			{
+				free(ellis_island);
+				ellis_island = NULL;
+                return (free(data.new_york), NULL); //no hay mas lineas
+			}
+            return (data.new_york); //lineas
         }
     }
+	printf("exit3\n");
     return (NULL);
 }
 
-int main (void)
+#ifdef MAIN
+int main (int argc, char **argv)
 {
 	int fd;
 	char *line;
+	int i;
 
 	atexit(leaks);
-//	leaks();
-	fd = open("poesia", O_RDONLY);
 
-int i;
-while (i != 30)
-{
-	line = get_next_line(fd);
-	printf("line: %s", line);
-	free(line);
-if (line == NULL)
+	if (argc < 2)
+	{
+		printf("Error!\n");
+		return 1;
+	}
+	++argv;
+	while (*argv)
+	{
+		fd = open(*argv, O_RDONLY);
+		printf("\nOpen '%s' file\n", *argv);
+		i = 0;
+		while ((line = get_next_line(fd)))
+		{
+			printf("%i, line: '%s'", i, line);
 			free(line);
-i++;
+			i++;
+		}
+		close(fd);
+		printf("\nClose '%s' file\n", *argv);
+		++argv;
+	}
 }
-
-
+#endif
 /*	
 	do
 	{
@@ -136,8 +137,9 @@ i++;
 			free(line);
 	} while (line);
 */
+/*
 	close(fd);
 	//getchar(); //mi blocca l'esecuzione peer fare un debug con "leack a.aut"
 	//system("leaks a.out");
 	return (0);
-}
+}*/
