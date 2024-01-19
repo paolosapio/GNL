@@ -6,53 +6,29 @@
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:18:11 by psapio            #+#    #+#             */
-/*   Updated: 2024/01/11 13:17:05 by psapio           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:20:50 by psapio           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "get_next_line.h"
-
-/*
-void	*ft_calloc(size_t count, size_t size)
-{
-	size_t	total_size;
-	size_t	i;
-	char	*pointer;
-
-	i = 0;
-	if (size != 0 && count >= SIZE_MAX / size)
-		return (NULL);
-	total_size = count * size;
-	pointer = malloc(total_size);
-	if (pointer == NULL)
-		return (NULL);
-	while (total_size > 0)
-	{
-		pointer[i] = '\0';
-		total_size--;
-		i++;
-	}
-	return (pointer);
-}*/
 
 char	*ft_strdup(const char *s1)
 {
-    size_t	size_p;
-    char	*s1double;
-    size_t	i;
+	size_t	size_p;
+	char	*s1double;
+	size_t	i;
 
-    i =	0;
-    size_p = ft_strlen(s1);
-    s1double = malloc(size_p + 1);
-    if (s1double == NULL)
-        return (NULL);
-    while (s1[i] != '\0')
-    {
-        s1double[i] = s1[i];
-        i++;
-    }
-    s1double[i] = '\0';
-    return (s1double);
+	i = 0;
+	size_p = ft_strlen(s1);
+	s1double = malloc(size_p + 1);
+	if (s1double == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		s1double[i] = s1[i];
+		i++;
+	}
+	s1double[i] = '\0';
+	return (s1double);
 }
 
 size_t	ft_strlen(const char *s)
@@ -113,11 +89,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	ii = 0;
 	while (s2[ii] != '\0')
-	{
-		string3[i] = s2[ii];
-		i++;
-		ii++;
-	}
+		string3[i++] = s2[ii++];
 	string3[i] = '\0';
 	return (string3);
 }
@@ -133,7 +105,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 		return (NULL);
 	input_length = ft_strlen(s);
 	if (start >= input_length)
-		return (ft_strdup(""));//calloc(1, sizeof(char)));
+		return (ft_strdup(""));
 	if (input_length - start < len)
 		substring_length = input_length - start;
 	else
