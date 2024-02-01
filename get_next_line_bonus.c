@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psapio <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 //#define BUFFER_SIZE	BUFFER_SIZE
 /*
@@ -73,50 +73,43 @@ static char	*loop(int fd, t_data *data, char **ellis)
 char	*get_next_line(int fd)
 {
 	t_data		data;
-	static char	*ellis;
+	static char	*ellis[OPEN_MAX];
 
 	if (fd < 0)
 		return (NULL);
-	if (ellis == NULL)
+	if (ellis[fd] == NULL)
 	{
-		ellis = malloc(1);
-		if (!ellis)
+		ellis[fd] = malloc(1);
+		if (!ellis[fd])
 			return (NULL);
-		ellis[0] = '\0';
+		ellis[fd][0] = '\0';
 	}
-	return (loop(fd, &data, &ellis));
+	return (loop(fd, &data, &ellis[fd]));
 }
 /*
-//#ifdef MAIN
-int main (int argc, char **argv)
+int main(void)
 {
-	int fd;
+	int fd1 = open("poe1", O_RDONLY);
+	int fd2 = open("poe2", O_RDONLY);
+	int fd3 = open("poe3", O_RDONLY);
 	char *line;
-	int i;
 
-//	atexit(leaks);
-
-	if (argc < 2)
-	{
-		printf("Error!\n");
-		return 1;
-	}
-	++argv;
-	while (*argv)
-	{
-		fd = open(*argv, O_RDONLY);
-		printf("\nOpen '%s' file\n", *argv);
-		i = 0;
-		while ((line = get_next_line(fd)))
-		{
-			printf("%i, line: %s", i, line);
-			free(line);
-			i++;
-		}
-		close(fd);
-		printf("\nClose '%s' file\n", *argv);
-		++argv;
-	}
-}
-//#endif
-*/
+	line = get_next_line(fd1);
+	printf("poe1:\nfd: [%d]\nline: [%s]\n", fd1, line);
+	line = get_next_line(fd2);
+	printf("poe2:\nfd: [%d]\nline: [%s]\n", fd2, line);
+	line = get_next_line(fd3);
+	printf("poe3:\nfd: [%d]\nline: [%s]\n", fd3, line);
+	line = get_next_line(fd1);
+	printf("poe1:\nfd: [%d]\nline: [%s]\n", fd1, line);
+	line = get_next_line(fd2);
+	printf("poe2:\nfd: [%d]\nline: [%s]\n", fd2, line);
+	line = get_next_line(fd3);
+	printf("poe3:\nfd: [%d]\nline: [%s]\n", fd3, line);
+	line = get_next_line(fd1);
+	printf("poe1:\nfd: [%d]\nline: [%s]\n", fd1, line);
+	line = get_next_line(fd2);
+	printf("poe2:\nfd: [%d]\nline: [%s]\n", fd2, line);
+	line = get_next_line(fd3);
+	printf("poe3:\nfd: [%d]\nline: [%s]\n", fd3, line);
+}*/
